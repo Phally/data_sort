@@ -1,5 +1,10 @@
 <?php
 class Test extends Model {
+	public $hasMany = array('AssociatedTest');
+}
+
+class AssociatedTest extends Model {
+	public $belongsTo = array('Test');
 }
 
 class TestsController extends Controller {
@@ -8,7 +13,7 @@ class TestsController extends Controller {
 
 class FetcherComponentTestCase extends CakeTestCase {
 	
-	public $fixtures = array('plugin.data_sort.test');
+	public $fixtures = array('plugin.data_sort.test', 'plugin.data_sort.associated_test');
 	private $Tests = null;
 	
 	public function startTest() {
@@ -34,18 +39,33 @@ class FetcherComponentTestCase extends CakeTestCase {
 		$expected = array(1, 2, 3, 4, 5, 6, 7);
 		$this->assertEqual($result, $expected, 'Records complete and in proper order.');
 	}
+
+	public function testFetchWithModelParameter() {
+		$this->Tests->Fetcher->initialize($this->Tests);
+		$data = $this->Tests->Fetcher->fetch($this->Tests->Test);
+		
+		$result = Set::extract('/Test/id', $data);
+		$expected = array(1, 2, 3, 4, 5, 6, 7);
+		$this->assertEqual($result, $expected, 'Records complete and in proper order.');
+		
+		$data = $this->Tests->Fetcher->fetch($this->Tests->Test->AssociatedTest);
+		
+		$result = Set::extract('/AssociatedTest/id', $data);
+		$expected = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
+		$this->assertEqual($result, $expected, 'Records complete and in proper order.');
+	}
 	
 	public function testFetchWithOptions() {
 		$this->Tests->Fetcher->initialize($this->Tests);
 		
 		$this->Tests->Fetcher->options = array(
-			'order' => array('Test.dummy_count' => 'ASC'),
+			'order' => array('Test.created' => 'DESC'),
 			'limit' => 3
 		);
 		$data = $this->Tests->Fetcher->fetch();
 		
 		$result = Set::extract('/Test/id', $data);
-		$expected = array(7, 6, 5);
+		$expected = array(5, 4, 3);
 		$this->assertEqual($result, $expected, 'Records complete and in proper order.');
 	}
 	
