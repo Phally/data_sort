@@ -1,16 +1,17 @@
 <?php
 class FetcherComponent extends Object {
 	
-	// public $params = array();
 	public $options = array();
 	
+	private $controller = null;
 	private $model = null;
 	
 	public function initialize($controller) {
+		$this->controller = $controller;
 		if (isset($controller->{$controller->modelClass})) {
 			$this->model = $controller->{$controller->modelClass};
 		}
-		// $this->params = $controller->params;
+		$controller->helpers[] = 'DataSort.Datasort';
 	}
 	
 	public function fetch($model = null) {

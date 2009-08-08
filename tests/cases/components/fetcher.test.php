@@ -25,6 +25,11 @@ class FetcherComponentTestCase extends CakeTestCase {
 		$this->assertIsA($this->Tests->Fetcher, 'FetcherComponent', 'Component properly loaded');
 	}
 	
+	public function testInitialize() {
+		$this->Tests->Fetcher->initialize($this->Tests);
+		$this->assertTrue(in_array('DataSort.Datasort', $this->Tests->helpers), 'Helper properly loaded');
+	}
+	
 	public function testFetchWithoutModel() {
 		unset($this->Tests->Test);
 		$this->Tests->Fetcher->initialize($this->Tests);
