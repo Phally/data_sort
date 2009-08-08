@@ -4,7 +4,7 @@ class AssociatedTestFixture extends CakeTestFixture {
 	
 	public $fields = array(
 		'id' => array('type'=>'integer', 'null' => false, 'default' => NULL, 'length' => 10, 'key' => 'primary'),
-		'title' => array('type'=>'string', 'null' => false, 'default' => NULL, 'length' => 2),
+		'title' => array('type'=>'string', 'null' => false, 'default' => NULL, 'length' => 3),
 		'test_id' => array('type'=>'integer', 'null' => false, 'default' => NULL, 'length' => 10),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1))
 	);
