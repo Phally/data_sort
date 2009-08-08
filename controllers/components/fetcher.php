@@ -2,6 +2,7 @@
 class FetcherComponent extends Object {
 	
 	// public $params = array();
+	public $options = array();
 	
 	private $model = null;
 	
@@ -12,10 +13,12 @@ class FetcherComponent extends Object {
 		// $this->params = $controller->params;
 	}
 	
-	public function fetch($model = null, $options = array()) {
+	public function fetch($model = null) {
 		if (!$model && !$model = $this->model) {
 			return false;
 		}
+		
+		$options = $this->options;
 		
 		return $model->find('all', $options);
 	}
