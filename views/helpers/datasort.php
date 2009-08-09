@@ -13,24 +13,25 @@ class DatasortHelper extends AppHelper {
 	public function link($title, $sort, $options = array()) {
 		$this->options = array_merge($this->defaults, $options);
 		
-		$direction = $this->direction($sort);
-		
-		if (!empty($this->params['datasort']['default'])) {
-			$limit = implode('|', $this->params['datasort']['default']);
+		$page = $this->options['page'];
+		$direction = $this->direction($sort, $page);
+
+		if (!empty($this->params['datasort'][$page])) {
+			$limit = implode('|', $this->params['datasort'][$page]);
 		} else {
 			$limit = null;
 		}
-		
-		$page = $this->options['page'];
 		
 		$url = compact('sort', 'direction', 'page', 'limit');
 		$attributes = array_diff_key($this->options, $this->defaults);
 		return $this->Html->link($title, $url, $attributes);
 	}
 		
-	private function direction($sort) {
-		if (isset($this->params['named']['direction']) && ($sort == $this->params['named']['sort'])) {
-			return $this->toggleDirection($this->params['named']['direction']);
+	private function direction($sort, $page) {
+		if (isset($this->params['named']['direction']) && isset($this->params['named']['sort']) && isset($this->params['named']['page'])) {
+			if ($sort == $this->params['named']['sort'] && $page == $this->params['named']['page']) {
+				return $this->toggleDirection($this->params['named']['direction']);
+			}
 		}
 		return $this->options['direction'];
 	}

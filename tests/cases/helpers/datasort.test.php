@@ -46,6 +46,7 @@ class DatasortHelperTestCase extends CakeTestCase {
 	public function testLinkToggleToAsc() {
 		$this->Datasort->params['named']['sort'] = 'Test.id';
 		$this->Datasort->params['named']['direction'] = 'desc';
+		$this->Datasort->params['named']['page'] = 'default';
 		$this->Datasort->params['datasort']['default'] = array(1, 2, 3);
 		
 		$sort = 'Test.id';
@@ -60,6 +61,7 @@ class DatasortHelperTestCase extends CakeTestCase {
 	public function testLinkToggleToDesc() {
 		$this->Datasort->params['named']['sort'] = 'Test.id';
 		$this->Datasort->params['named']['direction'] = 'asc';
+		$this->Datasort->params['named']['page'] = 'default';
 		$this->Datasort->params['datasort']['default'] = array(1, 2, 3);
 		
 		$sort = 'Test.id';
@@ -96,6 +98,7 @@ class DatasortHelperTestCase extends CakeTestCase {
 	public function testLinkWithDefaultDirectionAndNamedParameter() {
 		$this->Datasort->params['named']['sort'] = 'Test.id';
 		$this->Datasort->params['named']['direction'] = 'desc';
+		$this->Datasort->params['named']['page'] = 'default';
 		$this->Datasort->params['datasort']['default'] = array(1, 2, 3);
 		
 		$sort = 'Test.id';
@@ -110,6 +113,7 @@ class DatasortHelperTestCase extends CakeTestCase {
 	public function testLinkWithDifferentSortFieldAndNamedParameter() {
 		$this->Datasort->params['named']['sort'] = 'Test.id';
 		$this->Datasort->params['named']['direction'] = 'asc';
+		$this->Datasort->params['named']['page'] = 'default';
 		$this->Datasort->params['datasort']['default'] = array(1, 2, 3);
 		
 		$sort = 'Test.created';

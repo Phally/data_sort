@@ -92,6 +92,7 @@ class FetcherComponentTestCase extends CakeTestCase {
 	
 	public function testFetchWithOptionsAndNamedParameters() {
 		$this->Tests->params['named'] = array(
+			'page' => 'default',
 			'sort' => 'Test.id',
 			'direction' => 'desc'
 		);
@@ -102,7 +103,6 @@ class FetcherComponentTestCase extends CakeTestCase {
 			'order' => array('Test.created' => 'DESC')
 		);
 		$data = $this->Tests->Fetcher->fetch();
-		
 		$result = Set::extract('/Test/id', $data);
 		$expected = array(7, 6, 5, 4, 3, 2, 1);
 		$this->assertEqual($result, $expected, 'Records complete and in proper order');
@@ -124,6 +124,80 @@ class FetcherComponentTestCase extends CakeTestCase {
 		$result = $this->Tests->params['datasort']['default'];
 		$expected = Set::extract($data, '/Test/id');
 		$this->assertEqual($result, $expected, 'IDs placed in Controller::params');
+	}
+	
+	public function testFetchMultiple() {
+		$this->Tests->Fetcher->initialize($this->Tests);
+		
+		$this->Tests->Fetcher->options = array(
+			'page' => 'resultIdDesc',
+			'order' => array('Test.id' => 'desc')
+		);
+		$resultIdDesc = $this->Tests->Fetcher->fetch();
+		
+		$this->Tests->Fetcher->options = array(
+			'page' => 'resultCreatedDesc',
+			'order' => array('Test.created' => 'desc')
+		);
+		$resultCreatedDesc = $this->Tests->Fetcher->fetch();
+		
+		$this->Tests->Fetcher->options = array(
+			'page' => 'resultLimited',
+			'limit' => 3
+		);
+		$resultLimited = $this->Tests->Fetcher->fetch();
+		
+		$results = Set::extract($resultIdDesc, '/Test/id');
+		$expected = array(7, 6, 5, 4, 3, 2, 1);
+		$this->assertEqual($results, $expected, 'First result matches');
+		
+		$results = Set::extract($resultCreatedDesc, '/Test/id');
+		$expected = array(5, 4, 3, 1, 2, 6, 7);
+		$this->assertEqual($results, $expected, 'Second result matches');
+		
+		$results = Set::extract($resultLimited, '/Test/id');
+		$expected = array(1, 2, 3);
+		$this->assertEqual($results, $expected, 'Third result matches');
+	}
+
+	public function testFetchMultipleWithNamedParameters() {
+		$this->Tests->params['named'] = array(
+			'page' => 'resultLimited',
+			'sort' => 'Test.id',
+			'direction' => 'desc',
+			'limit' => '1|2|3'
+		);
+		$this->Tests->Fetcher->initialize($this->Tests);
+		
+		$this->Tests->Fetcher->options = array(
+			'page' => 'resultIdDesc',
+			'order' => array('Test.id' => 'desc')
+		);
+		$resultIdDesc = $this->Tests->Fetcher->fetch();
+		
+		$this->Tests->Fetcher->options = array(
+			'page' => 'resultCreatedDesc',
+			'order' => array('Test.created' => 'desc')
+		);
+		$resultCreatedDesc = $this->Tests->Fetcher->fetch();
+		
+		$this->Tests->Fetcher->options = array(
+			'page' => 'resultLimited',
+			'limit' => 3
+		);
+		$resultLimited = $this->Tests->Fetcher->fetch();
+		
+		$results = Set::extract($resultIdDesc, '/Test/id');
+		$expected = array(7, 6, 5, 4, 3, 2, 1);
+		$this->assertEqual($results, $expected, 'First result matches');
+		
+		$results = Set::extract($resultCreatedDesc, '/Test/id');
+		$expected = array(5, 4, 3, 1, 2, 6, 7);
+		$this->assertEqual($results, $expected, 'Second result matches');
+		
+		$results = Set::extract($resultLimited, '/Test/id');
+		$expected = array(3, 2, 1);
+		$this->assertEqual($results, $expected, 'Third result matches');
 	}
 	
 	public function endTest() {

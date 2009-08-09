@@ -6,6 +6,10 @@ class FetcherComponent extends Object {
 	private $controller = null;
 	private $model = null;
 	
+	private $defaults = array(
+		'page' => 'default'
+	);
+	
 	public function initialize($controller) {
 		$this->controller = $controller;
 		if (isset($controller->{$controller->modelClass})) {
@@ -19,34 +23,43 @@ class FetcherComponent extends Object {
 			return false;
 		}
 		
-		$data = $model->find('all',  $this->options());
-		$this->appendParams(Set::extract($data, '/' . $model->alias . '/' . $model->primaryKey));
+		$options = $this->options();
+		
+		$page = isset($options['page']) ? $options['page'] : 'default';
+		unset($options['page']);
+		
+		$data = $model->find('all', $options);
+		$this->appendParams($page, Set::extract($data, '/' . $model->alias . '/' . $model->primaryKey));
 		
 		return $data;
 	}
 	
-	private function appendParams($ids) {
+	private function appendParams($page, $ids) {
 		if (isset($this->options['limit'])) {
-			$this->controller->params['datasort']['default'] = $ids;
+			$this->controller->params['datasort'][$page] = $ids;
 		} else {
-			$this->controller->params['datasort']['default'] = null;
+			$this->controller->params['datasort'][$page] = null;
 		}
 	}
 	
 	private function options() {
 		$params = $this->controller->params;
-		$options = $this->options;
-		
-		if (isset($params['named']['sort']) && isset($params['named']['direction'])) {
-			$options['order'] = array($params['named']['sort'] => $params['named']['direction']);
-		}
+		$options = array_merge($this->defaults, $this->options);
 		
 		if (isset($options['fields']) && !in_array($this->model->primaryKey, $options['fields']) && !in_array($this->model->alias . '.' . $this->model->primaryKey, $options['fields'])) {
 			$options['fields'][] = $this->model->alias . '.' . $this->model->primaryKey;
 		}
 		
-		if (isset($params['named']['limit']) && is_array($ids = explode('|', $params['named']['limit']))) {
-			$options['conditions'] = array($this->model->alias . '.' . $this->model->primaryKey => $ids);
+		if (isset($params['named']['page']) && isset($params['named']['direction']) && $options['page'] == $params['named']['page']) {
+			
+			if (isset($params['named']['sort'])) {
+				$options['order'] = array($params['named']['sort'] => $params['named']['direction']);
+			}
+		
+			if (isset($params['named']['limit']) && is_array($ids = explode('|', $params['named']['limit'])) ) {
+				$options['conditions'] = array($this->model->alias . '.' . $this->model->primaryKey => $ids);
+			}
+			
 		}
 		
 		return $options;
