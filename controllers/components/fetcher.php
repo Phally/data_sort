@@ -45,7 +45,7 @@ class FetcherComponent extends Object {
 			$options['fields'][] = $this->model->alias . '.' . $this->model->primaryKey;
 		}
 		
-		if (isset($params['named']['limit']) && is_array($ids = unserialize(urldecode($params['named']['limit'])))) {
+		if (isset($params['named']['limit']) && is_array($ids = explode('|', $params['named']['limit']))) {
 			$options['conditions'] = array($this->model->alias . '.' . $this->model->primaryKey => $ids);
 		}
 		

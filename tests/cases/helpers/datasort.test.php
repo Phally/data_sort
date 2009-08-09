@@ -25,7 +25,7 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$sort = 'Test.id';
 		$direction = 'asc';
 		$page = 'default';
-		$limit = urlencode(serialize(array(1, 2, 3)));
+		$limit = '1|2|3';
 		
 		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
 		$this->Datasort->link('#', 'Test.id');
@@ -37,7 +37,7 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$sort = 'Test.id';
 		$direction = 'asc';
 		$page = 'default';
-		$limit = urlencode(serialize(array(1, 2, 3)));
+		$limit = '1|2|3';
 		
 		$this->Datasort->Html->expectOnce('link', array('id', compact('sort', 'direction', 'page', 'limit'), array()));
 		$this->Datasort->link('id', 'Test.id');
@@ -51,7 +51,7 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$sort = 'Test.id';
 		$direction = 'asc';
 		$page = 'default';
-		$limit = urlencode(serialize(array(1, 2, 3)));
+		$limit = '1|2|3';
 		
 		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
 		$this->Datasort->link('#', 'Test.id');
@@ -65,7 +65,7 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$sort = 'Test.id';
 		$direction = 'desc';
 		$page = 'default';
-		$limit = urlencode(serialize(array(1, 2, 3)));
+		$limit = '1|2|3';
 		
 		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
 		$this->Datasort->link('#', 'Test.id');
@@ -77,7 +77,7 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$sort = 'Test.id';
 		$direction = 'desc';
 		$page = 'default';
-		$limit = urlencode(serialize(array(1, 2, 3)));
+		$limit = '1|2|3';
 			
 		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
 		$this->Datasort->link('#', 'Test.id', array('direction' => 'desc'));
@@ -91,7 +91,7 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$sort = 'Test.id';
 		$direction = 'asc';
 		$page = 'default';
-		$limit = urlencode(serialize(array(1, 2, 3)));
+		$limit = '1|2|3';
 		
 		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
 		$this->Datasort->link('#', 'Test.id', array('direction' => 'desc'));
@@ -105,7 +105,7 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$sort = 'Test.created';
 		$direction = 'asc';
 		$page = 'default';
-		$limit = urlencode(serialize(array(1, 2, 3)));
+		$limit = '1|2|3';
 		
 		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
 		
@@ -118,7 +118,7 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$sort = 'Test.id';
 		$direction = 'desc';
 		$page = 'default';
-		$limit = urlencode(serialize(array(1, 2, 3)));
+		$limit = '1|2|3';
 		
 		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array('class' => 'sortlink')));
 		$this->Datasort->link('#', 'Test.id', array('direction' => 'desc', 'class' => 'sortlink'));
@@ -130,7 +130,7 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$sort = 'Test.id';
 		$direction = 'asc';
 		$page = 'default';
-		$limit = urlencode(serialize(array(1, 2, 3)));
+		$limit = '1|2|3';
 		
 		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array('class' => 'sortlink')));
 		

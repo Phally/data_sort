@@ -14,7 +14,13 @@ class DatasortHelper extends AppHelper {
 		$this->options = array_merge($this->defaults, $options);
 		
 		$direction = $this->direction($sort);
-		$limit = urlencode(serialize($this->params['datasort']['default']));
+		
+		if (!empty($this->params['datasort']['default'])) {
+			$limit = implode('|', $this->params['datasort']['default']);
+		} else {
+			$limit = null;
+		}
+		
 		$page = $this->options['page'];
 		
 		$url = compact('sort', 'direction', 'page', 'limit');
