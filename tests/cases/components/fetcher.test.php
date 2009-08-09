@@ -74,6 +74,24 @@ class FetcherComponentTestCase extends CakeTestCase {
 		$this->assertEqual($result, $expected, 'Records complete and in proper order.');
 	}
 	
+	public function testFetchWithOptionsAndNamedParameters() {
+		$this->Tests->params['named'] = array(
+			'sort' => 'Test.id',
+			'direction' => 'desc'
+		);
+		
+		$this->Tests->Fetcher->initialize($this->Tests);
+		
+		$this->Tests->Fetcher->options = array(
+			'order' => array('Test.created' => 'DESC')
+		);
+		$data = $this->Tests->Fetcher->fetch();
+		
+		$result = Set::extract('/Test/id', $data);
+		$expected = array(7, 6, 5, 4, 3, 2, 1);
+		$this->assertEqual($result, $expected, 'Records complete and in proper order.');
+	}
+	
 	public function endTest() {
 		unset($this->Tests);
 	}

@@ -19,9 +19,18 @@ class FetcherComponent extends Object {
 			return false;
 		}
 		
-		$options = $this->options;
+		$options = $this->options();
 		
 		return $model->find('all', $options);
+	}
+	
+	private function options() {
+		$params = $this->controller->params;
+		$options = $this->options;
+		if (isset($params['named']['sort']) && isset($params['named']['direction'])) {
+			$options['order'] = array($params['named']['sort'] => $params['named']['direction']);
+		}
+		return $options;
 	}
 }
 ?>
