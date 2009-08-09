@@ -31,12 +31,14 @@ class DatasortHelperTestCase extends CakeTestCase {
 	
 	public function testLinkToggleToAsc() {
 		$this->Datasort->Html->expectOnce('link', array('#', array('sort' => 'Test.id', 'direction' => 'asc'), array()));
+		$this->Datasort->params['named']['sort'] = 'Test.id';
 		$this->Datasort->params['named']['direction'] = 'desc';
 		$this->Datasort->link('#', 'Test.id');
 	}
 	
 	public function testLinkToggleToDesc() {
 		$this->Datasort->Html->expectOnce('link', array('#', array('sort' => 'Test.id', 'direction' => 'desc'), array()));
+		$this->Datasort->params['named']['sort'] = 'Test.id';
 		$this->Datasort->params['named']['direction'] = 'asc';
 		$this->Datasort->link('#', 'Test.id');
 	}
@@ -48,8 +50,16 @@ class DatasortHelperTestCase extends CakeTestCase {
 	
 	public function testLinkWithDefaultDirectionAndNamedParameter() {
 		$this->Datasort->Html->expectOnce('link', array('#', array('sort' => 'Test.id', 'direction' => 'asc'), array()));
+		$this->Datasort->params['named']['sort'] = 'Test.id';
 		$this->Datasort->params['named']['direction'] = 'desc';
 		$this->Datasort->link('#', 'Test.id', array('direction' => 'desc'));
+	}
+	
+	public function testLinkWithDifferentSortFieldAndNamedParameter() {
+		$this->Datasort->Html->expectOnce('link', array('#', array('sort' => 'Test.created', 'direction' => 'asc'), array()));
+		$this->Datasort->params['named']['sort'] = 'Test.id';
+		$this->Datasort->params['named']['direction'] = 'asc';
+		$this->Datasort->link('#', 'Test.created');
 	}
 	
 	public function testLinkWithDefaultDirectionAndHtmlAttributestributes() {
