@@ -64,8 +64,10 @@ class FetcherComponentTestCase extends CakeTestCase {
 		$this->Tests->Fetcher->initialize($this->Tests);
 		
 		$this->Tests->Fetcher->options = array(
-			'order' => array('Test.created' => 'DESC'),
-			'limit' => 3
+			'default' => array(
+				'order' => array('Test.created' => 'DESC'),
+				'limit' => 3
+			)
 		);
 		$data = $this->Tests->Fetcher->fetch();
 		
@@ -78,10 +80,12 @@ class FetcherComponentTestCase extends CakeTestCase {
 		$this->Tests->Fetcher->initialize($this->Tests);
 		
 		$this->Tests->Fetcher->options = array(
-			'fields' => array('created'),
-			'order' => array('Test.created' => 'DESC'),
-			'limit' => 3,
-			'recursive' => -1
+			'default' => array(
+				'fields' => array('created'),
+				'order' => array('Test.created' => 'DESC'),
+				'limit' => 3,
+				'recursive' => -1
+			)
 		);
 		$data = $this->Tests->Fetcher->fetch();
 		
@@ -100,7 +104,9 @@ class FetcherComponentTestCase extends CakeTestCase {
 		$this->Tests->Fetcher->initialize($this->Tests);
 		
 		$this->Tests->Fetcher->options = array(
-			'order' => array('Test.created' => 'DESC')
+			'default' => array(
+				'order' => array('Test.created' => 'DESC')
+			)
 		);
 		$data = $this->Tests->Fetcher->fetch();
 		$result = Set::extract('/Test/id', $data);
@@ -118,7 +124,11 @@ class FetcherComponentTestCase extends CakeTestCase {
 	
 	public function testFetchParamsPassingWithLimit() {
 		$this->Tests->Fetcher->initialize($this->Tests);
-		$this->Tests->Fetcher->options = array('limit' => 5);
+		$this->Tests->Fetcher->options = array(
+			'default' => array(
+				'limit' => 5
+			)
+		);
 		$data = $this->Tests->Fetcher->fetch();
 		
 		$result = $this->Tests->params['datasort']['default'];
@@ -130,36 +140,33 @@ class FetcherComponentTestCase extends CakeTestCase {
 		$this->Tests->Fetcher->initialize($this->Tests);
 		
 		$this->Tests->Fetcher->options = array(
-			'page' => 'resultIdDesc',
-			'order' => array('Test.id' => 'desc')
+			'resultIdDesc' => array(
+				'order' => array('Test.id' => 'desc')
+			),
+			'resultCreatedDesc' => array(
+				'order' => array('Test.created' => 'desc')
+			),
+			'resultLimited' => array(
+				'limit' => 3
+			)
 		);
-		$resultIdDesc = $this->Tests->Fetcher->fetch();
 		
-		$this->Tests->Fetcher->options = array(
-			'page' => 'resultCreatedDesc',
-			'order' => array('Test.created' => 'desc')
-		);
-		$resultCreatedDesc = $this->Tests->Fetcher->fetch();
-		
-		$this->Tests->Fetcher->options = array(
-			'page' => 'resultLimited',
-			'limit' => 3
-		);
-		$resultLimited = $this->Tests->Fetcher->fetch();
-		
+		$resultIdDesc = $this->Tests->Fetcher->fetch(null, 'resultIdDesc');
 		$results = Set::extract($resultIdDesc, '/Test/id');
 		$expected = array(7, 6, 5, 4, 3, 2, 1);
 		$this->assertEqual($results, $expected, 'First result matches');
 		
+		$resultCreatedDesc = $this->Tests->Fetcher->fetch(null, 'resultCreatedDesc');
 		$results = Set::extract($resultCreatedDesc, '/Test/id');
 		$expected = array(5, 4, 3, 1, 2, 6, 7);
 		$this->assertEqual($results, $expected, 'Second result matches');
 		
+		$resultLimited = $this->Tests->Fetcher->fetch(null, 'resultLimited');
 		$results = Set::extract($resultLimited, '/Test/id');
 		$expected = array(1, 2, 3);
 		$this->assertEqual($results, $expected, 'Third result matches');
 	}
-
+	
 	public function testFetchMultipleWithNamedParameters() {
 		$this->Tests->params['named'] = array(
 			'page' => 'resultLimited',
@@ -167,34 +174,32 @@ class FetcherComponentTestCase extends CakeTestCase {
 			'direction' => 'desc',
 			'limit' => '1|2|3'
 		);
+		
 		$this->Tests->Fetcher->initialize($this->Tests);
 		
 		$this->Tests->Fetcher->options = array(
-			'page' => 'resultIdDesc',
-			'order' => array('Test.id' => 'desc')
+			'resultIdDesc' => array(
+				'order' => array('Test.id' => 'desc')
+			),
+			'resultCreatedDesc' => array(
+				'order' => array('Test.created' => 'desc')
+			),
+			'resultLimited' => array(
+				'limit' => 3
+			)
 		);
-		$resultIdDesc = $this->Tests->Fetcher->fetch();
 		
-		$this->Tests->Fetcher->options = array(
-			'page' => 'resultCreatedDesc',
-			'order' => array('Test.created' => 'desc')
-		);
-		$resultCreatedDesc = $this->Tests->Fetcher->fetch();
-		
-		$this->Tests->Fetcher->options = array(
-			'page' => 'resultLimited',
-			'limit' => 3
-		);
-		$resultLimited = $this->Tests->Fetcher->fetch();
-		
+		$resultIdDesc = $this->Tests->Fetcher->fetch(null, 'resultIdDesc');
 		$results = Set::extract($resultIdDesc, '/Test/id');
 		$expected = array(7, 6, 5, 4, 3, 2, 1);
 		$this->assertEqual($results, $expected, 'First result matches');
 		
+		$resultCreatedDesc = $this->Tests->Fetcher->fetch(null, 'resultCreatedDesc');
 		$results = Set::extract($resultCreatedDesc, '/Test/id');
 		$expected = array(5, 4, 3, 1, 2, 6, 7);
 		$this->assertEqual($results, $expected, 'Second result matches');
 		
+		$resultLimited = $this->Tests->Fetcher->fetch(null, 'resultLimited');
 		$results = Set::extract($resultLimited, '/Test/id');
 		$expected = array(3, 2, 1);
 		$this->assertEqual($results, $expected, 'Third result matches');

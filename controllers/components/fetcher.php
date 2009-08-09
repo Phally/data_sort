@@ -6,10 +6,6 @@ class FetcherComponent extends Object {
 	private $controller = null;
 	private $model = null;
 	
-	private $defaults = array(
-		'page' => 'default'
-	);
-	
 	public function initialize($controller) {
 		$this->controller = $controller;
 		if (isset($controller->{$controller->modelClass})) {
@@ -18,15 +14,12 @@ class FetcherComponent extends Object {
 		$controller->helpers[] = 'DataSort.Datasort';
 	}
 	
-	public function fetch($model = null) {
+	public function fetch($model = null, $page = 'default') {
 		if (!$model && !$model = $this->model) {
 			return false;
 		}
 		
-		$options = $this->options();
-		
-		$page = isset($options['page']) ? $options['page'] : 'default';
-		unset($options['page']);
+		$options = $this->options($page);
 		
 		$data = $model->find('all', $options);
 		$this->appendParams($page, Set::extract($data, '/' . $model->alias . '/' . $model->primaryKey));
@@ -35,22 +28,22 @@ class FetcherComponent extends Object {
 	}
 	
 	private function appendParams($page, $ids) {
-		if (isset($this->options['limit'])) {
+		if (isset($this->options[$page]['limit'])) {
 			$this->controller->params['datasort'][$page] = $ids;
 		} else {
 			$this->controller->params['datasort'][$page] = null;
 		}
 	}
 	
-	private function options() {
+	private function options($page) {
 		$params = $this->controller->params;
-		$options = array_merge($this->defaults, $this->options);
+		$options = isset($this->options[$page]) ? $this->options[$page] : array();
 		
 		if (isset($options['fields']) && !in_array($this->model->primaryKey, $options['fields']) && !in_array($this->model->alias . '.' . $this->model->primaryKey, $options['fields'])) {
 			$options['fields'][] = $this->model->alias . '.' . $this->model->primaryKey;
 		}
 		
-		if (isset($params['named']['page']) && isset($params['named']['direction']) && $options['page'] == $params['named']['page']) {
+		if (isset($params['named']['page']) && isset($params['named']['direction']) && $page == $params['named']['page']) {
 			
 			if (isset($params['named']['sort'])) {
 				$options['order'] = array($params['named']['sort'] => $params['named']['direction']);
