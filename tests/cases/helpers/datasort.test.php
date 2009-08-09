@@ -83,6 +83,16 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$this->Datasort->link('#', 'Test.id', array('direction' => 'desc'));
 	}
 	
+	public function testLinkWithoutLimit() {
+		$sort = 'Test.id';
+		$direction = 'asc';
+		$page = 'default';
+		$limit = null;
+			
+		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
+		$this->Datasort->link('#', 'Test.id');
+	}
+	
 	public function testLinkWithDefaultDirectionAndNamedParameter() {
 		$this->Datasort->params['named']['sort'] = 'Test.id';
 		$this->Datasort->params['named']['direction'] = 'desc';
@@ -133,7 +143,6 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$limit = '1|2|3';
 		
 		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array('class' => 'sortlink')));
-		
 		$this->Datasort->link('#', 'Test.id', array('class' => 'sortlink'));
 	}
 	
