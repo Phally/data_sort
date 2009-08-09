@@ -42,7 +42,7 @@ class FetcherComponentTestCase extends CakeTestCase {
 		
 		$result = Set::extract('/Test/id', $data);
 		$expected = array(1, 2, 3, 4, 5, 6, 7);
-		$this->assertEqual($result, $expected, 'Records complete and in proper order.');
+		$this->assertEqual($result, $expected, 'Records complete and in proper order');
 	}
 
 	public function testFetchWithModelParameter() {
@@ -51,13 +51,13 @@ class FetcherComponentTestCase extends CakeTestCase {
 		
 		$result = Set::extract('/Test/id', $data);
 		$expected = array(1, 2, 3, 4, 5, 6, 7);
-		$this->assertEqual($result, $expected, 'Records complete and in proper order.');
+		$this->assertEqual($result, $expected, 'Records complete and in proper order');
 		
 		$data = $this->Tests->Fetcher->fetch($this->Tests->Test->AssociatedTest);
 		
 		$result = Set::extract('/AssociatedTest/id', $data);
 		$expected = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
-		$this->assertEqual($result, $expected, 'Records complete and in proper order.');
+		$this->assertEqual($result, $expected, 'Records complete and in proper order');
 	}
 	
 	public function testFetchWithOptions() {
@@ -71,7 +71,23 @@ class FetcherComponentTestCase extends CakeTestCase {
 		
 		$result = Set::extract('/Test/id', $data);
 		$expected = array(5, 4, 3);
-		$this->assertEqual($result, $expected, 'Records complete and in proper order.');
+		$this->assertEqual($result, $expected, 'Records complete and in proper order');
+	}
+	
+	public function testFetchWithoutIdField() {
+		$this->Tests->Fetcher->initialize($this->Tests);
+		
+		$this->Tests->Fetcher->options = array(
+			'fields' => array('created'),
+			'order' => array('Test.created' => 'DESC'),
+			'limit' => 3,
+			'recursive' => -1
+		);
+		$data = $this->Tests->Fetcher->fetch();
+		
+		$result = Set::extract('/Test/id', $data);
+		$expected = array(5, 4, 3);
+		$this->assertEqual($result, $expected, 'IDs present in array');
 	}
 	
 	public function testFetchWithOptionsAndNamedParameters() {
@@ -89,7 +105,25 @@ class FetcherComponentTestCase extends CakeTestCase {
 		
 		$result = Set::extract('/Test/id', $data);
 		$expected = array(7, 6, 5, 4, 3, 2, 1);
-		$this->assertEqual($result, $expected, 'Records complete and in proper order.');
+		$this->assertEqual($result, $expected, 'Records complete and in proper order');
+	}
+	
+	public function testFetchParamsPassing() {
+		$this->Tests->Fetcher->initialize($this->Tests);
+		$data = $this->Tests->Fetcher->fetch();
+		
+		$result = $this->Tests->params['datasort']['default'];
+		$this->assertNull($result, 'IDs not placed in Controller::params because \'limit\' is not set');
+	}
+	
+	public function testFetchParamsPassingWithLimit() {
+		$this->Tests->Fetcher->initialize($this->Tests);
+		$this->Tests->Fetcher->options = array('limit' => 5);
+		$data = $this->Tests->Fetcher->fetch();
+		
+		$result = $this->Tests->params['datasort']['default'];
+		$expected = Set::extract($data, '/Test/id');
+		$this->assertEqual($result, $expected, 'IDs placed in Controller::params');
 	}
 	
 	public function endTest() {

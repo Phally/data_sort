@@ -20,55 +20,120 @@ class DatasortHelperTestCase extends CakeTestCase {
 	}
 	
 	public function testLinkSimple() {
-		$this->Datasort->Html->expectOnce('link', array('#', array('sort' => 'Test.id', 'direction' => 'asc'), array()));
+		$this->Datasort->params['datasort']['default'] = array(1, 2, 3);
+		
+		$sort = 'Test.id';
+		$direction = 'asc';
+		$page = 'default';
+		$limit = urlencode(serialize(array(1, 2, 3)));
+		
+		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
 		$this->Datasort->link('#', 'Test.id');
 	}
 	
 	public function testLinkTitle() {
-		$this->Datasort->Html->expectOnce('link', array('id', array('sort' => 'Test.id', 'direction' => 'asc'), array()));
+		$this->Datasort->params['datasort']['default'] = array(1, 2, 3);
+		
+		$sort = 'Test.id';
+		$direction = 'asc';
+		$page = 'default';
+		$limit = urlencode(serialize(array(1, 2, 3)));
+		
+		$this->Datasort->Html->expectOnce('link', array('id', compact('sort', 'direction', 'page', 'limit'), array()));
 		$this->Datasort->link('id', 'Test.id');
 	}
 	
 	public function testLinkToggleToAsc() {
-		$this->Datasort->Html->expectOnce('link', array('#', array('sort' => 'Test.id', 'direction' => 'asc'), array()));
 		$this->Datasort->params['named']['sort'] = 'Test.id';
 		$this->Datasort->params['named']['direction'] = 'desc';
+		$this->Datasort->params['datasort']['default'] = array(1, 2, 3);
+		
+		$sort = 'Test.id';
+		$direction = 'asc';
+		$page = 'default';
+		$limit = urlencode(serialize(array(1, 2, 3)));
+		
+		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
 		$this->Datasort->link('#', 'Test.id');
 	}
 	
 	public function testLinkToggleToDesc() {
-		$this->Datasort->Html->expectOnce('link', array('#', array('sort' => 'Test.id', 'direction' => 'desc'), array()));
 		$this->Datasort->params['named']['sort'] = 'Test.id';
 		$this->Datasort->params['named']['direction'] = 'asc';
+		$this->Datasort->params['datasort']['default'] = array(1, 2, 3);
+		
+		$sort = 'Test.id';
+		$direction = 'desc';
+		$page = 'default';
+		$limit = urlencode(serialize(array(1, 2, 3)));
+		
+		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
 		$this->Datasort->link('#', 'Test.id');
 	}
 	
 	public function testLinkWithDefaultDirection() {
-		$this->Datasort->Html->expectOnce('link', array('#', array('sort' => 'Test.id', 'direction' => 'desc'), array()));
+		$this->Datasort->params['datasort']['default'] = array(1, 2, 3);
+		
+		$sort = 'Test.id';
+		$direction = 'desc';
+		$page = 'default';
+		$limit = urlencode(serialize(array(1, 2, 3)));
+			
+		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
 		$this->Datasort->link('#', 'Test.id', array('direction' => 'desc'));
 	}
 	
 	public function testLinkWithDefaultDirectionAndNamedParameter() {
-		$this->Datasort->Html->expectOnce('link', array('#', array('sort' => 'Test.id', 'direction' => 'asc'), array()));
 		$this->Datasort->params['named']['sort'] = 'Test.id';
 		$this->Datasort->params['named']['direction'] = 'desc';
+		$this->Datasort->params['datasort']['default'] = array(1, 2, 3);
+		
+		$sort = 'Test.id';
+		$direction = 'asc';
+		$page = 'default';
+		$limit = urlencode(serialize(array(1, 2, 3)));
+		
+		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
 		$this->Datasort->link('#', 'Test.id', array('direction' => 'desc'));
 	}
 	
 	public function testLinkWithDifferentSortFieldAndNamedParameter() {
-		$this->Datasort->Html->expectOnce('link', array('#', array('sort' => 'Test.created', 'direction' => 'asc'), array()));
 		$this->Datasort->params['named']['sort'] = 'Test.id';
 		$this->Datasort->params['named']['direction'] = 'asc';
+		$this->Datasort->params['datasort']['default'] = array(1, 2, 3);
+		
+		$sort = 'Test.created';
+		$direction = 'asc';
+		$page = 'default';
+		$limit = urlencode(serialize(array(1, 2, 3)));
+		
+		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
+		
 		$this->Datasort->link('#', 'Test.created');
 	}
 	
 	public function testLinkWithDefaultDirectionAndHtmlAttributestributes() {
-		$this->Datasort->Html->expectOnce('link', array('#', array('sort' => 'Test.id', 'direction' => 'desc'), array('class' => 'sortlink')));
+		$this->Datasort->params['datasort']['default'] = array(1, 2, 3);
+		
+		$sort = 'Test.id';
+		$direction = 'desc';
+		$page = 'default';
+		$limit = urlencode(serialize(array(1, 2, 3)));
+		
+		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array('class' => 'sortlink')));
 		$this->Datasort->link('#', 'Test.id', array('direction' => 'desc', 'class' => 'sortlink'));
 	}
 	
 	public function testLinkWithHtmlAttributestributes() {
-		$this->Datasort->Html->expectOnce('link', array('#', array('sort' => 'Test.id', 'direction' => 'asc'), array('class' => 'sortlink')));
+		$this->Datasort->params['datasort']['default'] = array(1, 2, 3);
+		
+		$sort = 'Test.id';
+		$direction = 'asc';
+		$page = 'default';
+		$limit = urlencode(serialize(array(1, 2, 3)));
+		
+		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array('class' => 'sortlink')));
+		
 		$this->Datasort->link('#', 'Test.id', array('class' => 'sortlink'));
 	}
 	

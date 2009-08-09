@@ -6,15 +6,18 @@ class DatasortHelper extends AppHelper {
 	public $options = array();
 	private $defaults = array(
 		'sort' => null,
-		'direction' => 'asc'
+		'direction' => 'asc',
+		'page' => 'default'
 	);
 	
 	public function link($title, $sort, $options = array()) {
 		$this->options = array_merge($this->defaults, $options);
 		
 		$direction = $this->direction($sort);
+		$limit = urlencode(serialize($this->params['datasort']['default']));
+		$page = $this->options['page'];
 		
-		$url = compact('sort', 'direction');
+		$url = compact('sort', 'direction', 'page', 'limit');
 		$attributes = array_diff_key($this->options, $this->defaults);
 		return $this->Html->link($title, $url, $attributes);
 	}
