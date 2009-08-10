@@ -219,6 +219,62 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$this->Datasort->link('#', 'Test.id');
 	}
 	
+	public function testOptionsWithoutOverride() {
+		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
+		$this->Datasort->params['datasort']['default']['session'] = false;
+		
+		$this->Datasort->options(array('class' => 'sortlink'));
+		
+		$sort = 'Test.id';
+		$direction = 'asc';
+		$page = 'default';
+		$limit = '1|2|3';
+		
+		$this->Datasort->Html->expectOnce('link', array('id', compact('sort', 'direction', 'page', 'limit'), array('class' => 'sortlink')));
+		$this->Datasort->link('id', 'Test.id');
+	}
+	
+	public function testOptionsWithOverride() {
+		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
+		$this->Datasort->params['datasort']['default']['session'] = false;
+		
+		$sort = 'Test.id';
+		$direction = 'asc';
+		$page = 'default';
+		$limit = '1|2|3';
+		
+		$this->Datasort->options(array('class' => 'sortlink'));
+		$this->Datasort->Html->expectOnce('link', array('id', compact('sort', 'direction', 'page', 'limit'), array('class' => 'customclass')));
+		$this->Datasort->link('id', 'Test.id', array('class' => 'customclass'));
+	}
+	
+	public function testLinkWithAnchor() {
+		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
+		$this->Datasort->params['datasort']['default']['session'] = false;
+		
+		$sort = 'Test.id';
+		$direction = 'asc';
+		$page = 'default';
+		$limit = '1|2|3';
+		
+		$this->Datasort->Html->expectOnce('link', array('id', array_merge(compact('sort', 'direction', 'page', 'limit'), array('#' => 'default_test_id')), array('name' => 'default_test_id')));
+		$this->Datasort->link('id', 'Test.id', array('anchor' => true));
+	}
+	
+	public function testLinkWithGlobalAnchor() {
+		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
+		$this->Datasort->params['datasort']['default']['session'] = false;
+		
+		$sort = 'Test.id';
+		$direction = 'asc';
+		$page = 'default';
+		$limit = '1|2|3';
+		
+		$this->Datasort->Html->expectOnce('link', array('id', array_merge(compact('sort', 'direction', 'page', 'limit'), array('#' => 'default_test_id')), array('name' => 'default_test_id')));
+		$this->Datasort->options(array('anchor' => true));
+		$this->Datasort->link('id', 'Test.id');
+	}
+	
 	public function endTest() {
 		unset($this->Datasort);
 	}
