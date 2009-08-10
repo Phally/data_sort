@@ -1,7 +1,7 @@
 <?php
 class DatasortHelper extends AppHelper {
 
-	public $helpers = array('Html');
+	public $helpers = array('Html', 'Session');
 	
 	public $options = array();
 	private $defaults = array(
@@ -16,8 +16,8 @@ class DatasortHelper extends AppHelper {
 		$page = $this->options['page'];
 		$direction = $this->direction($sort, $page);
 
-		if (!empty($this->params['datasort'][$page])) {
-			$limit = implode('|', $this->params['datasort'][$page]);
+		if (!empty($this->params['datasort'][$page]['ids'])) {
+			$limit = implode('|', $this->params['datasort'][$page]['ids']);
 		} else {
 			$limit = null;
 		}
@@ -31,6 +31,14 @@ class DatasortHelper extends AppHelper {
 		if (isset($this->params['named']['direction']) && isset($this->params['named']['sort']) && isset($this->params['named']['page'])) {
 			if ($sort == $this->params['named']['sort'] && $page == $this->params['named']['page']) {
 				return $this->toggleDirection($this->params['named']['direction']);
+			}
+		} 
+		
+		if ($this->params['datasort'][$page]['session']) {
+			if ($order = $this->Session->read('DataSort.' . $page . '.order')) {
+				if (key($order) == $sort) {
+					return $this->toggleDirection(current($order));
+				}
 			}
 		}
 		return $this->options['direction'];

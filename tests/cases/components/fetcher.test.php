@@ -16,9 +16,15 @@ class FetcherComponentTestCase extends CakeTestCase {
 	public $fixtures = array('plugin.data_sort.test', 'plugin.data_sort.associated_test');
 	private $Tests = null;
 	
+	public function startCase() {
+		App::import('Component', 'Session');
+		Mock::generate('SessionComponent');
+	}
+	
 	public function startTest() {
 		$this->Tests = new TestsController();
 		$this->Tests->constructClasses();
+		$this->Tests->Session = new MockSessionComponent();
 	}
 	
 	public function testInstance() {
@@ -118,7 +124,7 @@ class FetcherComponentTestCase extends CakeTestCase {
 		$this->Tests->Fetcher->initialize($this->Tests);
 		$data = $this->Tests->Fetcher->fetch();
 		
-		$result = $this->Tests->params['datasort']['default'];
+		$result = $this->Tests->params['datasort']['default']['ids'];
 		$this->assertNull($result, 'IDs not placed in Controller::params because \'limit\' is not set');
 	}
 	
@@ -131,7 +137,7 @@ class FetcherComponentTestCase extends CakeTestCase {
 		);
 		$data = $this->Tests->Fetcher->fetch();
 		
-		$result = $this->Tests->params['datasort']['default'];
+		$result = $this->Tests->params['datasort']['default']['ids'];
 		$expected = Set::extract($data, '/Test/id');
 		$this->assertEqual($result, $expected, 'IDs placed in Controller::params');
 	}
@@ -192,6 +198,74 @@ class FetcherComponentTestCase extends CakeTestCase {
 		$resultIdDesc = $this->Tests->Fetcher->fetch(null, 'resultIdDesc');
 		$results = Set::extract($resultIdDesc, '/Test/id');
 		$expected = array(7, 6, 5, 4, 3, 2, 1);
+		$this->assertEqual($results, $expected, 'First result matches');
+		
+		$resultCreatedDesc = $this->Tests->Fetcher->fetch(null, 'resultCreatedDesc');
+		$results = Set::extract($resultCreatedDesc, '/Test/id');
+		$expected = array(5, 4, 3, 1, 2, 6, 7);
+		$this->assertEqual($results, $expected, 'Second result matches');
+		
+		$resultLimited = $this->Tests->Fetcher->fetch(null, 'resultLimited');
+		$results = Set::extract($resultLimited, '/Test/id');
+		$expected = array(3, 2, 1);
+		$this->assertEqual($results, $expected, 'Third result matches');
+	}
+	
+	public function testFetchWriteToSession() {
+		$this->Tests->params['named'] = array(
+			'page' => 'default',
+			'sort' => 'Test.id',
+			'direction' => 'asc'
+		);
+		
+		$this->Tests->Fetcher->initialize($this->Tests);
+		
+		$this->Tests->Fetcher->options = array(
+			'default' => array(
+				'session' => true,
+				'order' => array('Test.id' => 'desc')
+			)
+		);
+		
+		$this->Tests->Session->expectOnce('write', array('DataSort.default', array(
+			'session' => true,
+			'order' => array('Test.id' => 'asc')
+		)));
+		$this->Tests->Fetcher->fetch();
+	}
+	
+	public function testFetchMultipleWithNamedParametersAndSessionData() {
+		$this->Tests->Session->setReturnValue('read', array(
+			'session' => true,
+			'order' => array('Test.id' => 'asc')
+		));
+		
+		$this->Tests->params['named'] = array(
+			'page' => 'resultLimited',
+			'sort' => 'Test.id',
+			'direction' => 'desc',
+			'limit' => '1|2|3'
+		);
+		
+		$this->Tests->Fetcher->initialize($this->Tests);
+		
+		$this->Tests->Fetcher->options = array(
+			'resultIdDesc' => array(
+				'session' => true,
+				'order' => array('Test.id' => 'desc')
+			),
+			'resultCreatedDesc' => array(
+				'order' => array('Test.created' => 'desc')
+			),
+			'resultLimited' => array(
+				'limit' => 3
+			)
+		);
+		
+		$this->Tests->Session->expectOnce('read', array('DataSort.resultIdDesc'));
+		$resultIdDesc = $this->Tests->Fetcher->fetch(null, 'resultIdDesc');
+		$results = Set::extract($resultIdDesc, '/Test/id');
+		$expected = array(1, 2, 3, 4, 5, 6, 7);
 		$this->assertEqual($results, $expected, 'First result matches');
 		
 		$resultCreatedDesc = $this->Tests->Fetcher->fetch(null, 'resultCreatedDesc');
