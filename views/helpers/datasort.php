@@ -6,10 +6,11 @@ class DatasortHelper extends AppHelper {
 	private $options = array();
 	private $globals = array();
 	private $defaults = array(
-		'sort' => null,
+		'anchor' => false,
 		'direction' => 'asc',
 		'page' => 'default',
-		'anchor' => false
+		'sort' => null,		
+		'url' => array()
 	);
 	
 	public function link($title, $sort, $options = array()) {
@@ -24,7 +25,7 @@ class DatasortHelper extends AppHelper {
 			$limit = null;
 		}
 		
-		$url = compact('sort', 'direction', 'page', 'limit');
+		$url = array_merge($this->options['url'], compact('sort', 'direction', 'page', 'limit'));
 		$attributes = array_diff_key($this->options, $this->defaults);
 		
 		if ($this->options['anchor']) {

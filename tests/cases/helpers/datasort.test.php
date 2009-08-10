@@ -275,6 +275,20 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$this->Datasort->link('id', 'Test.id');
 	}
 	
+	public function testLinkWithGlobalUrl() {
+		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
+		$this->Datasort->params['datasort']['default']['session'] = false;
+		
+		$sort = 'Test.id';
+		$direction = 'asc';
+		$page = 'default';
+		$limit = '1|2|3';
+		
+		$this->Datasort->Html->expectOnce('link', array('id', array_merge(array(4, 'some' => 'param'), compact('sort', 'direction', 'page', 'limit')), array()));
+		$this->Datasort->options(array('url' => array(4, 'some' => 'param')));
+		$this->Datasort->link('id', 'Test.id');
+	}
+	
 	public function endTest() {
 		unset($this->Datasort);
 	}
