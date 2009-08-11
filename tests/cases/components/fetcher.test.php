@@ -17,6 +17,7 @@ class FetcherComponentTestCase extends CakeTestCase {
 	private $Tests = null;
 	
 	public function startCase() {
+		Router::reload();
 		App::import('Component', 'Session');
 		Mock::generate('SessionComponent');
 	}
@@ -34,6 +35,11 @@ class FetcherComponentTestCase extends CakeTestCase {
 	public function testInitialize() {
 		$this->Tests->Fetcher->initialize($this->Tests);
 		$this->assertTrue(in_array('DataSort.Datasort', $this->Tests->helpers), 'Helper properly loaded');
+		
+		$result = array_keys(Router::getInstance()->named['rules']);
+		$expected = array_merge(array('dataset', 'datafield', 'datasort', 'datascope'), Router::getInstance()->named['default']);
+		
+		$this->assertEqual($result, $expected, 'Named parameters connected to the Router');
 	}
 	
 	public function testFetchWithoutModel() {
@@ -102,9 +108,9 @@ class FetcherComponentTestCase extends CakeTestCase {
 	
 	public function testFetchWithOptionsAndNamedParameters() {
 		$this->Tests->params['named'] = array(
-			'page' => 'default',
-			'sort' => 'Test.id',
-			'direction' => 'desc'
+			'dataset' => 'default',
+			'datafield' => 'Test.id',
+			'datasort' => 'desc'
 		);
 		
 		$this->Tests->Fetcher->initialize($this->Tests);
@@ -175,10 +181,10 @@ class FetcherComponentTestCase extends CakeTestCase {
 	
 	public function testFetchMultipleWithNamedParameters() {
 		$this->Tests->params['named'] = array(
-			'page' => 'resultLimited',
-			'sort' => 'Test.id',
-			'direction' => 'desc',
-			'limit' => '1|2|3'
+			'dataset' => 'resultLimited',
+			'datafield' => 'Test.id',
+			'datasort' => 'desc',
+			'datascope' => '1|2|3'
 		);
 		
 		$this->Tests->Fetcher->initialize($this->Tests);
@@ -213,9 +219,9 @@ class FetcherComponentTestCase extends CakeTestCase {
 	
 	public function testFetchWriteToSession() {
 		$this->Tests->params['named'] = array(
-			'page' => 'default',
-			'sort' => 'Test.id',
-			'direction' => 'asc'
+			'dataset' => 'default',
+			'datafield' => 'Test.id',
+			'datasort' => 'asc'
 		);
 		
 		$this->Tests->Fetcher->initialize($this->Tests);
@@ -241,10 +247,10 @@ class FetcherComponentTestCase extends CakeTestCase {
 		));
 		
 		$this->Tests->params['named'] = array(
-			'page' => 'resultLimited',
-			'sort' => 'Test.id',
-			'direction' => 'desc',
-			'limit' => '1|2|3'
+			'dataset' => 'resultLimited',
+			'datafield' => 'Test.id',
+			'datasort' => 'desc',
+			'datascope' => '1|2|3'
 		);
 		
 		$this->Tests->Fetcher->initialize($this->Tests);

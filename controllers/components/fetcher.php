@@ -59,6 +59,9 @@ class FetcherComponent extends Object {
  * @access public
  */ 
 	public function initialize($controller) {
+	
+		// Connect needed named parameters:
+		Router::connectNamed(array('dataset', 'datafield', 'datasort', 'datascope'), array('default' => true));
 		
 		// Set controller reference:
 		$this->controller = $controller;
@@ -74,7 +77,7 @@ class FetcherComponent extends Object {
 		// Set the reference to the SessionComponent:
 		$this->session = $controller->Session;
 		
-		// Add the Datasort helper, so it can be used in the View.
+		// Add the Datasort helper, so it can be used in the View:
 		$controller->helpers[] = 'DataSort.Datasort';
 		
 	}
@@ -83,11 +86,11 @@ class FetcherComponent extends Object {
  * Method to get data.
  * 
  * @param object $model Model to fetch on, if non given the default Model for the Controller is used.
- * @param string $page Key in the FetcherComponent::$options variable to use as config for this fetch.
+ * @param string $dataset Key in the FetcherComponent::$options variable to use as config for this fetch.
  * @return array The found data.
  * @access public
  */ 
-	public function fetch($model = null, $page = 'default') {
+	public function fetch($model = null, $dataset = 'default') {
 	
 		// Check if there is a Model to fetch on or get the default Model:
 		if (!$model && !$model = $this->model) {
@@ -98,13 +101,13 @@ class FetcherComponent extends Object {
 		}
 		
 		// Get the fetch options:
-		$options = $this->options($page);
+		$options = $this->options($dataset);
 		
 		// Fetch the data from the model, using the options minus the specific options for this Component:
 		$data = $model->find('all', array_diff_key($options, $this->defaults));
 		
 		// Set the parameters for further use in the Helper/View:
-		$this->appendParams($page, $options, Set::extract($data, '/' . $model->alias . '/' . $model->primaryKey));
+		$this->appendParams($dataset, $options, Set::extract($data, '/' . $model->alias . '/' . $model->primaryKey));
 		
 		// Return the data to the Controller:
 		return $data;
@@ -114,51 +117,51 @@ class FetcherComponent extends Object {
 /**
  * Method to add parameters to the Controller to eventually pass on to the View.
  * 
- * @param string $page Key in the FetcherComponent::$options variable which is used to identify a specific set of parameters.
+ * @param string $dataset Key in the FetcherComponent::$options variable which is used to identify a specific set of parameters.
  * @param array $options Options to use to get parameter settings from.
  * @param array $ids List of primary keys of the fetched model to use as scope for the next request.
  * @return void
  * @access private
  */ 
-	private function appendParams($page, $options, $ids) {
+	private function appendParams($dataset, $options, $ids) {
 	
 		// Check if a limit is set:
 		if (isset($options['limit'])) {
 		
 			// Limit is set, pass list of ids to the View/Helper:
-			$this->controller->params['datasort'][$page]['ids'] = $ids;
+			$this->controller->params['datasort'][$dataset]['ids'] = $ids;
 			
 		} else {
 		
 			// Limit is not set, don't pass the list, but set the key:
-			$this->controller->params['datasort'][$page]['ids'] = null;
+			$this->controller->params['datasort'][$dataset]['ids'] = null;
 		}
 		
 		// Pass the boolean to trigger the helper to use the session:
-		$this->controller->params['datasort'][$page]['session'] = $options['session'];
+		$this->controller->params['datasort'][$dataset]['session'] = $options['session'];
 		
 	}
 
 /**
  * Method to configure the options for the current fetch and places them in the session (if specified).
  * 
- * @param string $page Key in the FetcherComponent::$options variable which is used to identify a specific set of options.
+ * @param string $dataset Key in the FetcherComponent::$options variable which is used to identify a specific set of options.
  * @return array Configured list of options to use for the current fetch.
  * @access private
  */ 	
-	private function options($page) {
+	private function options($dataset) {
 	
 		// Shortcut to the current params:
 		$params = $this->controller->params;
 		
 		// Check if any options are set, else set an empty array to prevent errors when merging with defaults:
-		$options = isset($this->options[$page]) ? $this->options[$page] : array();
+		$options = isset($this->options[$dataset]) ? $this->options[$dataset] : array();
 		
 		// Merge the options with the defaults, so all needed keys are set:
 		$options = array_merge($this->defaults, $options);
 		
 		// Check if the session needs to be used and if the session contains a set of options:
-		if ($options['session'] && $session = $this->session->read('DataSort.' . $page)) {
+		if ($options['session'] && $session = $this->session->read('DataSort.' . $dataset)) {
 			
 			// The session contains options, use these instead:
 			$options = $session;
@@ -174,18 +177,18 @@ class FetcherComponent extends Object {
 		}
 		
 		// Check if the page matches the current option set and if the direction is set:
-		if (isset($params['named']['page']) && isset($params['named']['direction']) && $page == $params['named']['page']) {
+		if (isset($params['named']['dataset']) && isset($params['named']['datasort']) && $dataset == $params['named']['dataset']) {
 			
 			// Check if the named parameter for the sort value is set:
-			if (isset($params['named']['sort'])) {
+			if (isset($params['named']['datafield'])) {
 				
 				// Change the order to what is given in the named parameters:
-				$options['order'] = array($params['named']['sort'] => $params['named']['direction']);
+				$options['order'] = array($params['named']['datafield'] => $params['named']['datasort']);
 				
 			}
 			
 			// Check if the named parameter for limit is set and if it contains an array of ids:
-			if (isset($params['named']['limit']) && is_array($ids = explode('|', $params['named']['limit'])) ) {
+			if (isset($params['named']['datascope']) && is_array($ids = explode('|', $params['named']['datascope'])) ) {
 			
 				// Replace the conditions to only get the ids in the limit:
 				$options['conditions'] = array($this->model->alias . '.' . $this->model->primaryKey => $ids);
@@ -196,7 +199,7 @@ class FetcherComponent extends Object {
 			if ($options['session']) {
 			
 				// Write the options to the session:
-				$this->session->write('DataSort.' . $page, $options);
+				$this->session->write('DataSort.' . $dataset, $options);
 				
 			}
 			

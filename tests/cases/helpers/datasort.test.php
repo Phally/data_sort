@@ -26,12 +26,12 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = false;
 		
-		$sort = 'Test.id';
-		$direction = 'asc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'asc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
-		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
+		$this->Datasort->Html->expectOnce('link', array('#', compact('datafield', 'datasort', 'dataset', 'datascope'), array()));
 		$this->Datasort->link('#', 'Test.id');
 	}
 	
@@ -39,44 +39,44 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = false;
 		
-		$sort = 'Test.id';
-		$direction = 'asc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'asc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
-		$this->Datasort->Html->expectOnce('link', array('id', compact('sort', 'direction', 'page', 'limit'), array()));
+		$this->Datasort->Html->expectOnce('link', array('id', compact('datafield', 'datasort', 'dataset', 'datascope'), array()));
 		$this->Datasort->link('id', 'Test.id');
 	}
 	
 	public function testLinkToggleToAsc() {
-		$this->Datasort->params['named']['sort'] = 'Test.id';
-		$this->Datasort->params['named']['direction'] = 'desc';
-		$this->Datasort->params['named']['page'] = 'default';
+		$this->Datasort->params['named']['datafield'] = 'Test.id';
+		$this->Datasort->params['named']['datasort'] = 'desc';
+		$this->Datasort->params['named']['dataset'] = 'default';
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = false;
 		
-		$sort = 'Test.id';
-		$direction = 'asc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'asc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
-		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
+		$this->Datasort->Html->expectOnce('link', array('#', compact('datafield', 'datasort', 'dataset', 'datascope'), array()));
 		$this->Datasort->link('#', 'Test.id');
 	}
 	
 	public function testLinkToggleToDesc() {
-		$this->Datasort->params['named']['sort'] = 'Test.id';
-		$this->Datasort->params['named']['direction'] = 'asc';
-		$this->Datasort->params['named']['page'] = 'default';
+		$this->Datasort->params['named']['datafield'] = 'Test.id';
+		$this->Datasort->params['named']['datasort'] = 'asc';
+		$this->Datasort->params['named']['dataset'] = 'default';
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = false;
 		
-		$sort = 'Test.id';
-		$direction = 'desc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'desc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
-		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
+		$this->Datasort->Html->expectOnce('link', array('#', compact('datafield', 'datasort', 'dataset', 'datascope'), array()));
 		$this->Datasort->link('#', 'Test.id');
 	}
 	
@@ -84,56 +84,56 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = false;
 		
-		$sort = 'Test.id';
-		$direction = 'desc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'desc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 			
-		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
-		$this->Datasort->link('#', 'Test.id', array('direction' => 'desc'));
+		$this->Datasort->Html->expectOnce('link', array('#', compact('datafield', 'datasort', 'dataset', 'datascope'), array()));
+		$this->Datasort->link('#', 'Test.id', array('datasort' => 'desc'));
 	}
 	
 	public function testLinkWithoutLimit() {
 		$this->Datasort->params['datasort']['default']['session'] = false;
 		
-		$sort = 'Test.id';
-		$direction = 'asc';
-		$page = 'default';
-		$limit = null;
+		$datafield = 'Test.id';
+		$datasort = 'asc';
+		$dataset = 'default';
+		$datascope = null;
 			
-		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
+		$this->Datasort->Html->expectOnce('link', array('#', compact('datafield', 'datasort', 'dataset', 'datascope'), array()));
 		$this->Datasort->link('#', 'Test.id');
 	}
 	
 	public function testLinkWithDefaultDirectionAndNamedParameter() {
-		$this->Datasort->params['named']['sort'] = 'Test.id';
-		$this->Datasort->params['named']['direction'] = 'desc';
-		$this->Datasort->params['named']['page'] = 'default';
+		$this->Datasort->params['named']['datafield'] = 'Test.id';
+		$this->Datasort->params['named']['datasort'] = 'desc';
+		$this->Datasort->params['named']['dataset'] = 'default';
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = false;
 		
-		$sort = 'Test.id';
-		$direction = 'asc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'asc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
-		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
-		$this->Datasort->link('#', 'Test.id', array('direction' => 'desc'));
+		$this->Datasort->Html->expectOnce('link', array('#', compact('datafield', 'datasort', 'dataset', 'datascope'), array()));
+		$this->Datasort->link('#', 'Test.id', array('datasort' => 'desc'));
 	}
 	
 	public function testLinkWithDifferentSortFieldAndNamedParameter() {
-		$this->Datasort->params['named']['sort'] = 'Test.id';
-		$this->Datasort->params['named']['direction'] = 'asc';
-		$this->Datasort->params['named']['page'] = 'default';
+		$this->Datasort->params['named']['datafield'] = 'Test.id';
+		$this->Datasort->params['named']['datasort'] = 'asc';
+		$this->Datasort->params['named']['dataset'] = 'default';
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = false;
 		
-		$sort = 'Test.created';
-		$direction = 'asc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.created';
+		$datasort = 'asc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
-		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
+		$this->Datasort->Html->expectOnce('link', array('#', compact('datafield', 'datasort', 'dataset', 'datascope'), array()));
 		
 		$this->Datasort->link('#', 'Test.created');
 	}
@@ -142,25 +142,25 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = false;
 		
-		$sort = 'Test.id';
-		$direction = 'desc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'desc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
-		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array('class' => 'sortlink')));
-		$this->Datasort->link('#', 'Test.id', array('direction' => 'desc', 'class' => 'sortlink'));
+		$this->Datasort->Html->expectOnce('link', array('#', compact('datafield', 'datasort', 'dataset', 'datascope'), array('class' => 'sortlink')));
+		$this->Datasort->link('#', 'Test.id', array('datasort' => 'desc', 'class' => 'sortlink'));
 	}
 	
 	public function testLinkWithHtmlAttributestributes() {
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = false;
 		
-		$sort = 'Test.id';
-		$direction = 'asc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'asc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
-		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array('class' => 'sortlink')));
+		$this->Datasort->Html->expectOnce('link', array('#', compact('datafield', 'datasort', 'dataset', 'datascope'), array('class' => 'sortlink')));
 		$this->Datasort->link('#', 'Test.id', array('class' => 'sortlink'));
 	}
 	
@@ -168,12 +168,12 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = true;
 		
-		$sort = 'Test.id';
-		$direction = 'asc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'asc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
-		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
+		$this->Datasort->Html->expectOnce('link', array('#', compact('datafield', 'datasort', 'dataset', 'datascope'), array()));
 		$this->Datasort->link('#', 'Test.id');
 	}
 	
@@ -182,12 +182,12 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = true;
 		
-		$sort = 'Test.id';
-		$direction = 'asc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'asc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
-		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
+		$this->Datasort->Html->expectOnce('link', array('#', compact('datafield', 'datasort', 'dataset', 'datascope'), array()));
 		$this->Datasort->link('#', 'Test.id');
 	}
 	
@@ -196,13 +196,13 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = true;
 		
-		$sort = 'Test.id';
-		$direction = 'desc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'desc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
-		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
-		$this->Datasort->link('#', 'Test.id', array('direction' => 'desc'));
+		$this->Datasort->Html->expectOnce('link', array('#', compact('datafield', 'datasort', 'dataset', 'datascope'), array()));
+		$this->Datasort->link('#', 'Test.id', array('datasort' => 'desc'));
 	}
 	
 	public function testLinkWithSessionEnabledWithSessionDataToDesc() {
@@ -210,12 +210,12 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = true;
 		
-		$sort = 'Test.id';
-		$direction = 'desc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'desc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
-		$this->Datasort->Html->expectOnce('link', array('#', compact('sort', 'direction', 'page', 'limit'), array()));
+		$this->Datasort->Html->expectOnce('link', array('#', compact('datafield', 'datasort', 'dataset', 'datascope'), array()));
 		$this->Datasort->link('#', 'Test.id');
 	}
 	
@@ -225,12 +225,12 @@ class DatasortHelperTestCase extends CakeTestCase {
 		
 		$this->Datasort->options(array('class' => 'sortlink'));
 		
-		$sort = 'Test.id';
-		$direction = 'asc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'asc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
-		$this->Datasort->Html->expectOnce('link', array('id', compact('sort', 'direction', 'page', 'limit'), array('class' => 'sortlink')));
+		$this->Datasort->Html->expectOnce('link', array('id', compact('datafield', 'datasort', 'dataset', 'datascope'), array('class' => 'sortlink')));
 		$this->Datasort->link('id', 'Test.id');
 	}
 	
@@ -238,13 +238,13 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = false;
 		
-		$sort = 'Test.id';
-		$direction = 'asc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'asc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
 		$this->Datasort->options(array('class' => 'sortlink'));
-		$this->Datasort->Html->expectOnce('link', array('id', compact('sort', 'direction', 'page', 'limit'), array('class' => 'customclass')));
+		$this->Datasort->Html->expectOnce('link', array('id', compact('datafield', 'datasort', 'dataset', 'datascope'), array('class' => 'customclass')));
 		$this->Datasort->link('id', 'Test.id', array('class' => 'customclass'));
 	}
 	
@@ -252,12 +252,12 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = false;
 		
-		$sort = 'Test.id';
-		$direction = 'asc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'asc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
-		$this->Datasort->Html->expectOnce('link', array('id', array_merge(compact('sort', 'direction', 'page', 'limit'), array('#' => 'default_test_id')), array('name' => 'default_test_id')));
+		$this->Datasort->Html->expectOnce('link', array('id', array_merge(compact('datafield', 'datasort', 'dataset', 'datascope'), array('#' => 'default_test_id')), array('name' => 'default_test_id')));
 		$this->Datasort->link('id', 'Test.id', array('anchor' => true));
 	}
 	
@@ -265,12 +265,12 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = false;
 		
-		$sort = 'Test.id';
-		$direction = 'asc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'asc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
-		$this->Datasort->Html->expectOnce('link', array('id', array_merge(compact('sort', 'direction', 'page', 'limit'), array('#' => 'default_test_id')), array('name' => 'default_test_id')));
+		$this->Datasort->Html->expectOnce('link', array('id', array_merge(compact('datafield', 'datasort', 'dataset', 'datascope'), array('#' => 'default_test_id')), array('name' => 'default_test_id')));
 		$this->Datasort->options(array('anchor' => true));
 		$this->Datasort->link('id', 'Test.id');
 	}
@@ -279,12 +279,12 @@ class DatasortHelperTestCase extends CakeTestCase {
 		$this->Datasort->params['datasort']['default']['ids'] = array(1, 2, 3);
 		$this->Datasort->params['datasort']['default']['session'] = false;
 		
-		$sort = 'Test.id';
-		$direction = 'asc';
-		$page = 'default';
-		$limit = '1|2|3';
+		$datafield = 'Test.id';
+		$datasort = 'asc';
+		$dataset = 'default';
+		$datascope = '1|2|3';
 		
-		$this->Datasort->Html->expectOnce('link', array('id', array_merge(array(4, 'some' => 'param'), compact('sort', 'direction', 'page', 'limit')), array()));
+		$this->Datasort->Html->expectOnce('link', array('id', array_merge(array(4, 'some' => 'param'), compact('datafield', 'datasort', 'dataset', 'datascope')), array()));
 		$this->Datasort->options(array('url' => array(4, 'some' => 'param')));
 		$this->Datasort->link('id', 'Test.id');
 	}
