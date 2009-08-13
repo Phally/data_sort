@@ -5,6 +5,7 @@
  * Generates sort links.
  *
  * @author Frank de Graaf (Phally)
+ * @license MIT license
  * @link http://wiki.github.com/Phally/data_sort
  */
 class DatasortHelper extends AppHelper {

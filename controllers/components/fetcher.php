@@ -5,6 +5,7 @@
  * Fetches data using given options and parameters.
  *
  * @author Frank de Graaf (Phally)
+ * @license MIT license
  * @link http://wiki.github.com/Phally/data_sort
  */
 class FetcherComponent extends Object {
